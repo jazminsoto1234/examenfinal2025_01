@@ -42,6 +42,25 @@ To run the application, you can create a main script that utilizes the `TaskCont
 python src/controller.py
 ```
 
+## 📸 Capturas de Pantalla
+
+### Crear usuarios
+![Inicio](docs/images/crear_usuario.png)
+
+### Obtener detalles
+![Tareas](docs/images/obtener_detalles.png)
+
+### Dependencia
+![Tareas](docs/images/dependencias.png)
+
+### Cambiar estado
+![Tareas](docs/images/Cambiar_estado.png)
+
+### Asignar
+![Tareas](docs/images/Asignar.png)
+
+
+
 ## Contributing
 Contributions are welcome! Please feel free to submit a pull request or open an issue for any suggestions or improvements.
 
