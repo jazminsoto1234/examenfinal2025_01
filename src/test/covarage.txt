@@ -1,0 +1,18 @@
+
+# 1. Ejecutar las pruebas con coverage desde el directorio raíz
+python3 -m coverage run --source=src test/test_unit.py
+
+# 2. Generar reporte general de cobertura
+python3 -m coverage report
+
+# 3. Generar reporte específico para las clases del modelo
+python3 -m coverage report --include="src/models/*"
+
+# 4. Generar reporte detallado con líneas faltantes para modelos
+python3 -m coverage report --show-missing --include="src/models/*"
+
+# 5. Generar reporte HTML (opcional)
+python3 -m coverage html
+
+# Alternativa usando unittest discover
+python3 -m coverage run --source=src -m unittest discover -s test -p "test_*.py"
