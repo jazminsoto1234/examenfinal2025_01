@@ -1,1 +1,0 @@
-{"tasks": [{"id": "c3dc72b1-f766-497c-8d6b-e284bc9ae782", "title": "progra", "description": "descripci\u00f3n de la tarea", "status": "Nuevo", "users": [{"usuario": "pedrito", "rol": "programador"}], "dependencies": []}], "users": [{"id": "pedrito", "name": "pedro", "email": null, "contactos": [], "tareas": []}]}
