@@ -38,7 +38,12 @@ def crear_tarea():
         return jsonify({"error": "Rol no válido"}), 400
 
     task_id = str(uuid.uuid4())
-    tarea = Tarea(task_id, data['nombre'], data['descripcion'])
+    # Mapear los nombres de campos
+    tarea = Tarea(
+        id=task_id,
+        title=data['nombre'],
+        description=data['descripcion']
+    )
     
     # Crear asignación al crear la tarea
     asignacion = Asignacion(task_id, data['usuario'])

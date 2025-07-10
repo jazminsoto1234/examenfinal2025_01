@@ -59,8 +59,8 @@ class TestControllerEndpoints(unittest.TestCase):
         
         # Realizar petición POST
         response = self.app.post('/tasks', 
-                               data=json.dumps(task_data),
-                               content_type='application/json')
+                            data=json.dumps(task_data),
+                            content_type='application/json')
         
         # Verificaciones
         self.assertEqual(response.status_code, 201)
@@ -74,8 +74,8 @@ class TestControllerEndpoints(unittest.TestCase):
         
         # Verificar estructura de la tarea creada
         created_task = self.mock_data_handler.tasks[0]
-        self.assertEqual(created_task['nombre'], task_data['nombre'])
-        self.assertEqual(created_task['descripcion'], task_data['descripcion'])
+        self.assertEqual(created_task['title'], task_data['nombre'])  # Cambiar 'nombre' por 'title'
+        self.assertEqual(created_task['description'], task_data['descripcion'])  # Cambiar 'descripcion' por 'description'
         self.assertIn('users', created_task)
 
     def test_crear_tarea_datos_faltantes(self):
