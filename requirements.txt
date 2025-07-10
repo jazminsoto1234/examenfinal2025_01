@@ -2,3 +2,4 @@ Flask==2.0.1
 SQLAlchemy==1.4.22
 pytest==6.2.4
 python-dateutil==2.8.2
+werkzeug==2.0.1

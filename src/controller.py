@@ -1,6 +1,8 @@
 from flask import Flask, jsonify, request
 from data_handler import DataHandler
 from models.tarea import Tarea
+from models.usuario import Usuario
+
 import uuid
 
 app = Flask(__name__)
@@ -136,6 +138,55 @@ def gestionar_dependencias_tarea(task_id):
     
     data_handler.save_data()
     return jsonify({"mensaje": "Dependencias actualizadas exitosamente"}), 200
+
+
+
+
+@app.route('/usuarios/<alias>', methods=['GET'])
+def get_usuario(alias):
+    """
+    Obtiene información del usuario y sus tareas asignadas
+    """
+    usuario = next((u for u in data_handler.users if u['id'] == alias), None)
+    if not usuario:
+        return jsonify({"error": "Usuario no encontrado"}), 404
+
+    # Buscar tareas asignadas al usuario
+    tareas_usuario = [
+        t for t in data_handler.tasks 
+        if any(u['usuario'] == alias for u in t['users'])
+    ]
+    
+    response = usuario.copy()
+    response['tareas'] = tareas_usuario
+    return jsonify(response)
+
+@app.route('/usuarios', methods=['POST'])
+def crear_usuario():
+    """
+    Crea un nuevo usuario
+    Entrada esperada:
+    {
+        "contacto": "alias del contacto",
+        "nombre": "nombre del usuario"
+    }
+    """
+    data = request.json
+    if not all(k in data for k in ['contacto', 'nombre']):
+        return jsonify({"error": "Faltan campos requeridos"}), 400
+
+    # Verificar si el usuario ya existe
+    if any(u['id'] == data['contacto'] for u in data_handler.users):
+        return jsonify({"error": "El alias ya está en uso"}), 400
+
+    nuevo_usuario = Usuario(data['contacto'], data['nombre'], None)
+    data_handler.users.append(nuevo_usuario.get_user_info())
+    data_handler.save_data()
+    
+    return jsonify({"mensaje": "Usuario creado exitosamente", "id": data['contacto']}), 201
+
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)
