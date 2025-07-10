@@ -4,8 +4,8 @@ class Tarea:
         self.title = title
         self.description = description
         self.status = status
-        self.users = []  # Lista de diccionarios con usuario y rol
-        self.dependencies = []  # Lista de IDs de tareas dependientes
+        self.users = []
+        self.dependencies = [] # Lista de IDs de tareas dependientes
 
     def mark_complete(self):
         self.status = 'completed'
