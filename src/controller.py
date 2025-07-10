@@ -20,8 +20,23 @@ def dummy_endpoint():
 
 @app.route('/tasks', methods=['POST'])
 def crear_tarea():
-    # ...existing code...
+    """
+    Crea una nueva tarea
+    Entrada esperada:
+    {
+        "nombre": "nombre de la tarea",
+        "descripcion": "descripción de la tarea",
+        "usuario": "alias",
+        "rol": "programador|pruebas|infra"
+    }
+    """
+    data = request.json
+    if not all(k in data for k in ['nombre', 'descripcion', 'usuario', 'rol']):
+        return jsonify({"error": "Faltan campos requeridos"}), 400
     
+    if data['rol'] not in ['programador', 'pruebas', 'infra']:
+        return jsonify({"error": "Rol no válido"}), 400
+
     task_id = str(uuid.uuid4())
     tarea = Tarea(task_id, data['nombre'], data['descripcion'])
     
@@ -39,7 +54,6 @@ def crear_tarea():
     data_handler.save_data()
     
     return jsonify({"id": task_id}), 201
-
 
 @app.route('/tasks/<task_id>', methods=['POST'])
 def actualizar_estado_tarea(task_id):
@@ -88,24 +102,15 @@ def gestionar_usuarios_tarea(task_id):
     if not tarea:
         return jsonify({"error": "Tarea no encontrada"}), 404
 
-    # Crear asignación
     if data['accion'] == 'adicionar':
-        asignacion = Asignacion(task_id, data['usuario'])
-        if 'users' not in tarea:
-            tarea['users'] = []
-        tarea['users'].append({
-            "usuario": data['usuario'], 
-            "rol": data['rol'],
-            **asignacion.get_assignment_details()
-        })
+        if not any(u['usuario'] == data['usuario'] and u['rol'] == data['rol'] for u in tarea['users']):
+            tarea['users'].append({"usuario": data['usuario'], "rol": data['rol']})
     else:
-        if 'users' in tarea:
-            tarea['users'] = [u for u in tarea['users'] 
-                            if not (u['usuario'] == data['usuario'] and u['rol'] == data['rol'])]
-
+        tarea['users'] = [u for u in tarea['users'] 
+                         if not (u['usuario'] == data['usuario'] and u['rol'] == data['rol'])]
+    
     data_handler.save_data()
     return jsonify({"mensaje": "Usuarios actualizados exitosamente"}), 200
-
 
 @app.route('/tasks/<task_id>/dependencies', methods=['POST'])
 def gestionar_dependencias_tarea(task_id):
